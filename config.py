@@ -8,7 +8,8 @@ class Projeto_config():
     ,branch_producao         
     ,branch_homologacao      
     ,branch_desenvolvimento  
-    ,script_inicial          
+    ,script_inicial
+    ,lista_ambientes_ativos          
     ) :
         self.nome_projeto               = nome_projeto                          #* DE PREFERENCIA O MESMO NOME DO PROJETO NO REPOSITÓRIO  
         self.endereco_repositorio       = endereco_repositorio                  #* URL DO ARQUIVO .GIT DO REPOSITÓRIO
@@ -17,6 +18,7 @@ class Projeto_config():
         self.branch_homologacao         = branch_homologacao                    #* NOME DA BRANCH DE HOMOLOGAÇÃO
         self.branch_desenvolvimento     = branch_desenvolvimento                #* NOME DA BRANCH DE DESENVOLVIMENTO
         self.script_inicial             = script_inicial                        #* SCRIPT PYTHON QUE SERÁ INICIADO OU REINICIADO A CADA ATUALIZAÇÃO
+        self.lista_ambientes_ativos     = lista_ambientes_ativos                #* LISTA DOS AMBIENTES DO PROJETO QUE DESEJAM SER CRIADOS 
 
 
 
@@ -28,6 +30,7 @@ proj_IGPyAppFront                       = Projeto_config(
     ,branch_homologacao                 = 'hom'
     ,branch_desenvolvimento             = 'dev'
     ,script_inicial                     = 'main.py'
+    ,lista_ambientes_ativos             = ['PROD','HOM','DEV']
     )
 
 proj_bot_sms                            = Projeto_config(
@@ -38,6 +41,7 @@ proj_bot_sms                            = Projeto_config(
     ,branch_homologacao                 = 'hom'
     ,branch_desenvolvimento             = 'dev'
     ,script_inicial                     = 'main.py'
+    ,lista_ambientes_ativos             = ['PROD','HOM','DEV']
     )
 
 
