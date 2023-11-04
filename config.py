@@ -5,7 +5,7 @@
 class Projeto_config():
 
     def __init__(self
-    ,nome_configuracao       
+    ,nome_projeto       
     ,endereco_repositorio    
     ,pasta_local_projeto     
     ,branch_producao         
@@ -13,20 +13,20 @@ class Projeto_config():
     ,branch_desenvolvimento  
     ,script_inicial          
     ) :
-        self.nome_configuracao       = nome_configuracao       
-        self.endereco_repositorio    = endereco_repositorio    
-        self.pasta_local_projeto     = pasta_local_projeto     
-        self.branch_producao         = branch_producao         
-        self.branch_homologacao      = branch_homologacao      
-        self.branch_desenvolvimento  = branch_desenvolvimento  
-        self.script_inicial          = script_inicial          
+        self.nome_projeto               = nome_projeto       
+        self.endereco_repositorio       = endereco_repositorio    
+        self.pasta_local_projeto        = pasta_local_projeto     
+        self.branch_producao            = branch_producao         
+        self.branch_homologacao         = branch_homologacao      
+        self.branch_desenvolvimento     = branch_desenvolvimento  
+        self.script_inicial             = script_inicial          
 
 
 
 
 
 proj_IGPyAppFront               = Projeto_config(
-    nome_configuracao           = 'IGPyAppFront'
+    nome_projeto                = 'IGPyAppFront'
     ,endereco_repositorio       = 'https://github.com/israelglixinski/IGPyAppFront.git' 
     ,pasta_local_projeto        = 'C:/Projetos'
     ,branch_producao            = 'master'
@@ -36,7 +36,7 @@ proj_IGPyAppFront               = Projeto_config(
     )
 
 proj_bot_sms                    = Projeto_config(
-    nome_configuracao           = 'bot_sms'
+    nome_projeto                = 'bot_sms'
     ,endereco_repositorio       = 'https://github.com/israelglixinski/bot_sms.git' 
     ,pasta_local_projeto        = 'C:/Projetos'
     ,branch_producao            = 'master'
