@@ -1,0 +1,23 @@
+[
+    {
+    "nome"                      : "IGPyAppFront"
+    ,"endereco"                 : "https://github.com/israelglixinski/IGPyAppFront.git"
+    ,"pasta_local"              : "C:/Projetos"
+    ,"branch_producao"          : "master"
+    ,"branch_homologacao"       : "hom"
+    ,"branch_desenvolvimento"   : "dev"
+    ,"script_inicial"           : "main.py"
+    }
+,
+    {
+    "nome"                      : "IGdfPyAppFront"
+    ,"endereco"                 : "https://github.com/israelglixinski/IGPyAppFront.git"
+    ,"pasta_local"              : "C:/Projetos"
+    ,"branch_producao"          : "master"
+    ,"branch_homologacao"       : "hom"
+    ,"branch_desenvolvimento"   : "dev"
+    ,"script_inicial"           : "main.py"
+    }
+]
+
+
