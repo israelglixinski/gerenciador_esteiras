@@ -1,7 +1,7 @@
 import sqlite3
 
 # Abre uma conexão com o banco de dados
-conexao = sqlite3.connect("database.db")
+conexao = sqlite3.connect("embedded_db_sqlite3.db")
 cursor = conexao.cursor()
 
 
