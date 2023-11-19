@@ -30,10 +30,10 @@ def iniciar_servico_projeto(nome_projeto):
         path_script_inicial = f'{configs.destino_local}/{projeto["nome_proj"]}/{projeto["branch"]}/{projeto["script_inicial"]}'
         start_processo = Popen(f'python {path_script_inicial}')                             #* Chamando o processo do script inicial  
         db_tiny.update_pid(projeto['nome_proj'],start_processo.pid)                         #* Atualizando o numero do seu PID no projeto
-        registrando('Iniciado serviço do projeto')
+        registrando(f'Iniciado serviço do projeto, PID: {start_processo.pid}')
     pass
 
-def parar_serciço_projeto(nome_projeto):
+def parar_servico_projeto(nome_projeto):
     '''Para o serviço do projeto, matando o seu PID salvo'''
     projeto = db_tiny.recupera_projeto(nome_projeto)                                        #* Recupera as informações do projeto
     if projeto['script_inicial_pid'] != 0:                                                  #* Confere se temos um PID salvo
@@ -66,40 +66,34 @@ def rotina():
             registrando('Criado uma nova pasta para trabalhar no projeto')
 
         ##### * Verificação se já temos o repositório clonado na pasta de destino
-        if os.path.exists(f'{path_branch_repositorio}/.git') == False:                      #* Caso ainda não esteja clonado, énecessário clonar           
+        if os.path.exists(f'{path_branch_repositorio}/.git') == False:                      #* Caso ainda não esteja clonado, é necessário clonar           
             registrando('Não foi encontrado o repositório, iniciando clone...') 
             git.Repo.clone_from(projeto["url_rep"], path_branch_repositorio,branch=projeto["branch"])
             registrando('Finalizado clone') 
             iniciar_servico_projeto(projeto["nome_proj"])                                   #* Inicia o script inicial do projeto
 
-
+        ##### * Caso já estejamos com o repositório clonado e pronto, damos continuidade ao processo
         else:
-            repositorio = git.Repo(path_branch_repositorio)
-            repositorio_remoto = repositorio.remotes.origin 
+            repositorio = git.Repo(path_branch_repositorio)                                 #* Definição do repositório local
+            repositorio_remoto = repositorio.remotes.origin                                 #* Definição do repositório remoto
 
-            last_commit_local = repositorio.commit().committed_datetime
-            last_commit_remot = repositorio_remoto.fetch()[0].commit.committed_datetime
+            last_commit_local = repositorio.commit().committed_datetime                     #* Obtem o datetime do ultimo commit local
+            last_commit_remot = repositorio_remoto.fetch()[0].commit.committed_datetime     #* Obtem o datetime do ultimo commit remoto
         
-            if last_commit_local == last_commit_remot:
+            if last_commit_local == last_commit_remot:                                      #* Caso os repositórios local e remoto estejam iguais 
                 registrando(f'{projeto["nome_proj"]} / {projeto["branch"]} - Estamos com a versão mais recente')
+                if projeto['script_inicial_pid'] == 0:                                      #* Caso o serviço do projeto ainda não tenha sido iniciado
+                    iniciar_servico_projeto(projeto["nome_proj"])                           #* Inicia o script inicial do projeto    
 
-            else:
+
+            else:                                                                           #* Mas caso os repositórios estejam diferentes
                 registrando(f'{projeto["nome_proj"]} / {projeto["branch"]} - Precisamos atualizar o repositório')
-                repositorio_remoto.pull()
-            sleep(3)
-
-def iniciar_projetos():
-    for projeto in projetos:
-        path_branch_repositorio = f'{configs.destino_local}/{projeto["nome_proj"]}/{projeto["branch"]}'
-        
-        start_processo = Popen(f'python {path_branch_repositorio}/{projeto["script_inicial"]}')           
-        print (f'{projeto["script_inicial"]} - {start_processo.pid}')
-        db_tiny.update_pid(projeto['nome_proj'],start_processo.pid)
-            
-
-        pass
-    pass
-
+                parar_servico_projeto(projeto["nome_proj"])                                 #* Para o serviço caso esteja ativo
+                sleep(10)                                                                   #* Aguarda para garantir a morte do serviço
+                repositorio_remoto.pull()                                                   #* Faz a sincronização dos repositórios
+                sleep(10)                                                                   #* Aguarda para garantir a cadencia de execução
+                iniciar_servico_projeto(projeto["nome_proj"])                               #* Inicia o script inicial do projeto
+                sleep(10)                                                                   #* Aguarda para garantir a cadencia de execução
 
 def orquestrador():
     '''Organiza a cadencia de execução'''
@@ -112,5 +106,4 @@ def orquestrador():
         pass
 
 if __name__ == '__main__':
-    # orquestrador()
-    iniciar_servico_projeto("exemplo_robo")
+    orquestrador()
