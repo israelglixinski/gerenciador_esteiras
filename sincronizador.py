@@ -47,16 +47,21 @@ def parar_servico_projeto(nome_projeto):
 def verifica_servico_projeto(nome_projeto):
     '''Verifica a integridate de execução do script inicial do projeto'''
     projeto = db_tiny.recupera_projeto(nome_projeto)                                        #* Recupera as informações do projeto
+    
+    projeto["verify"                ]   
+    projeto["verify_ult_confirm"    ]   
+    projeto["verify_log_path"       ]   
+    projeto["verify_log_min_inalt"  ]   
+    projeto["verify_web_url"        ]   
+    projeto["verify_web_max_try"    ]   
+    projeto["verify_web_timeout_max"]   
+    
     if projeto['verify'] == None:
         registrando(f"Não foi definido rotina de monitoramento para o projeto: {nome_projeto}/{projeto['branch']}")
     if projeto['verify'] == 'log':
-        
-
 
         pass
     if projeto['verify'] == 'web':
-
-
 
         pass
 
