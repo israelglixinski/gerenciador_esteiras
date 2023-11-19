@@ -44,6 +44,15 @@ def parar_servico_projeto(nome_projeto):
         registrando(f'Não foi encontrado PID salvo para o projeto: {nome_projeto}/{projeto["branch"]}')
     pass
 
+def verifica_servico_projeto(nome_projeto):
+    '''Verifica a integridate de execução do script inicial do projeto'''
+    projeto = db_tiny.recupera_projeto(nome_projeto)                                        #* Recupera as informações do projeto
+    if projeto[''] != None:
+        pass
+
+    pass
+
+
 ##### * Define todos os projetos como não inicializados, setando o PID como zero
 for projeto in projetos:
     db_tiny.update_pid(projeto['nome_proj'],0)
