@@ -15,9 +15,13 @@ def insert_projetos(
 ,script_inicial
 ,script_inicial_pid
 ,branch
-,monitoramento
-,monitoramento_param
-,monitoramento_valores
+,verify
+,verify_ult_confirm
+,verify_log_path
+,verify_log_min_inalt
+,verify_web_url
+,verify_web_max_try
+,verify_web_timeout_max
 ):
     projetos.insert(
         {
@@ -26,9 +30,13 @@ def insert_projetos(
         ,"script_inicial"           : script_inicial   
         ,"script_inicial_pid"       : script_inicial_pid   
         ,"branch"                   : branch          
-        ,"monitoramento"            : monitoramento
-        ,"monitoramento_param"      : monitoramento_param
-        ,"monitoramento_valores"    : monitoramento_valores
+        ,"verify"                   : verify
+        ,"verify_ult_confirm"       : verify_ult_confirm
+        ,"verify_log_path"          : verify_log_path
+        ,"verify_log_min_inalt"     : verify_log_min_inalt
+        ,"verify_web_url"           : verify_web_url
+        ,"verify_web_max_try"       : verify_web_max_try
+        ,"verify_web_timeout_max"   : verify_web_timeout_max
         }        
     )
     pass
@@ -51,30 +59,33 @@ def popula_inicial():
         )
 
     insert_projetos(
-        nome_proj              = "exemplo_robo"
+        nome_proj               = "exemplo_robo"
         ,url_rep                = "https://github.com/israelglixinski/exemplo_robo.git"
         ,script_inicial         = "main.py"
         ,script_inicial_pid     = 0
         ,branch                 = "main"
-        ,monitoramento          = "log"
-        ,monitoramento_param    =   {"path_log_file"        : "./logs/log.txt"
-                                    ,"minutos_max_sem_alt"  : 5
-                                    }
-        ,monitoramento_valores  =   {"ultima_alteracao"     : None}
+        ,verify                 = "log"
+        ,verify_ult_confirm     = None
+        ,verify_log_path        = "./logs/log.txt"
+        ,verify_log_min_inalt   = 5
+        ,verify_web_url         = None
+        ,verify_web_max_try     = None
+        ,verify_web_timeout_max = None
         )
 
     insert_projetos(
-        nome_proj              = "exemplo_web"
+        nome_proj               = "exemplo_web"
         ,url_rep                = "https://github.com/israelglixinski/exemplo_web.git"
         ,script_inicial         = "inicial.py"
         ,script_inicial_pid     = 0
         ,branch                 = "main"
-        ,monitoramento          = "web"
-        ,monitoramento_param    =   {"url"                           : "localhost"
-                                    ,"max_tentativas"                :5
-                                    ,"segundos_max_cada_tentativa"   :60
-                                    }
-        ,monitoramento_valores  =   {"ultima_confirmacao":None}
+        ,verify                 = "web"
+        ,verify_ult_confirm     = None
+        ,verify_log_path        = None
+        ,verify_log_min_inalt   = None
+        ,verify_web_url         = "localhost"
+        ,verify_web_max_try     = 5
+        ,verify_web_timeout_max = 2
         )
     pass
 
@@ -100,7 +111,7 @@ def recupera_projeto(nome_proj):
 
 if __name__ == '__main__':
     # configs.insert({"teste":"primeiro"})
-    # popula_inicial()
+    popula_inicial()
     # recupera_configs()
     # recupera_projeto('exemplo_robo')
 
