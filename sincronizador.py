@@ -12,15 +12,37 @@ configs     = db_tiny.recupera_configs()
 
 def registrando(texto):
     '''Para registro, exibição e monitoração das ações'''
-    print(f'{datetime.now().strftime("%Y/%m/%d %H:%M:%S")} - {texto}')
+    print(f'{datetime.now().strftime("%Y/%m/%d %H:%M:%S")} - GEEST - {texto}')
 
 def iniciar_servico_projeto(nome_projeto):
-    projeto = db_tiny.recupera_projeto(nome_projeto)
-    path_script_inicial = f'{configs.destino_local}/{projeto["nome_proj"]}/{projeto["branch"]}/{projeto["script_inicial"]}'
-    start_processo = Popen(f'python {path_script_inicial}')   
-    db_tiny.update_pid(projeto['nome_proj'],start_processo.pid)
+    '''Inicia o serviço do projeto chamando o script inicial com o python'''
+    
+    projeto = db_tiny.recupera_projeto(nome_projeto)                                        #* Recupera as informações do projeto
+    if projeto["script_inicial"] == None:                                                   #* Caso não tenha a informação do script inicial salva
+        registrando('Não foi definido script de inicialização para o projeto')              #* Não é necessário mais informações
+    else:                                                                                   #* Mas caso tenha a informação damos continuidade ao processo
+        if projeto['script_inicial_pid'] != 0:                                              #* Se tivermos um PID salvo, é necessário mata-lo
+            registrando(f'Finalizando o PID {projeto["script_inicial_pid"]} do projeto {nome_projeto}/{projeto["branch"]}')
+            os.system(f'taskkill /F /PID {projeto["script_inicial_pid"]}')                  #* Morte do PID sendo feita pelo os.system
+        
+        registrando('Inicializando script inical do projeto')
+        ##### * Definindo o caminho do script inicial do projeto
+        path_script_inicial = f'{configs.destino_local}/{projeto["nome_proj"]}/{projeto["branch"]}/{projeto["script_inicial"]}'
+        start_processo = Popen(f'python {path_script_inicial}')                             #* Chamando o processo do script inicial  
+        db_tiny.update_pid(projeto['nome_proj'],start_processo.pid)                         #* Atualizando o numero do seu PID no projeto
+        registrando('Iniciado serviço do projeto')
     pass
 
+def parar_serciço_projeto(nome_projeto):
+    '''Para o serviço do projeto, matando o seu PID salvo'''
+    projeto = db_tiny.recupera_projeto(nome_projeto)                                        #* Recupera as informações do projeto
+    if projeto['script_inicial_pid'] != 0:                                                  #* Confere se temos um PID salvo
+        registrando(f'Finalizando o PID {projeto["script_inicial_pid"]} do projeto {nome_projeto}/{projeto["branch"]}')
+        os.system(f'taskkill /F /PID {projeto["script_inicial_pid"]}')                      #* Mata o PID
+        db_tiny.update_pid(projeto['nome_proj'],0)                                          #* Atualiza o PID do projeto para zero
+    else:                                                                                   #* Caso não tenha PID salvo não faz nada
+        registrando(f'Não foi encontrado PID salvo para o projeto: {nome_projeto}/{projeto["branch"]}')
+    pass
 
 ##### * Define todos os projetos como não inicializados, setando o PID como zero
 for projeto in projetos:
@@ -80,6 +102,7 @@ def iniciar_projetos():
 
 
 def orquestrador():
+    '''Organiza a cadencia de execução'''
     while True:
         registrando('Iniciando rotina')
         rotina()
@@ -89,4 +112,5 @@ def orquestrador():
         pass
 
 if __name__ == '__main__':
-    orquestrador()
+    # orquestrador()
+    iniciar_servico_projeto("exemplo_robo")
